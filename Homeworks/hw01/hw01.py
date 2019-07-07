@@ -11,9 +11,9 @@ def a_plus_abs_b(a, b):
     5
     """
     if b < 0:
-        f = _____
+        f = sub
     else:
-        f = _____
+        f = add
     return f(a, b)
 
 def two_of_three(a, b, c):
@@ -29,7 +29,7 @@ def two_of_three(a, b, c):
     >>> two_of_three(5, 5, 5)
     50
     """
-    return _____
+    return (lambda max_num, min_num: (lambda middle_num: max_num * max_num + middle_num * middle_num)(a ^ b ^ c ^ max_num ^ min_num))(max(a, b, c), min(a, b, c))
 
 def largest_factor(n):
     """Return the largest factor of n that is smaller than n.
@@ -41,7 +41,8 @@ def largest_factor(n):
     >>> largest_factor(13) # factor is 1 since 13 is prime
     1
     """
-    "*** YOUR CODE HERE ***"
+    import math
+    return next((n // i for i in range(2, math.ceil(math.sqrt(n)) + 1) if n % i == 0), 1)
 
 def if_function(condition, true_result, false_result):
     """Return true_result if condition is a true value, and
@@ -85,13 +86,13 @@ def with_if_function():
     return if_function(c(), t(), f())
 
 def c():
-    "*** YOUR CODE HERE ***"
+    return False
 
 def t():
-    "*** YOUR CODE HERE ***"
+    print(1)
 
 def f():
-    "*** YOUR CODE HERE ***"
+    print(2)
 
 def hailstone(n):
     """Print the hailstone sequence starting at n and return its
@@ -108,4 +109,14 @@ def hailstone(n):
     >>> a
     7
     """
-    "*** YOUR CODE HERE ***"
+    from itertools import accumulate, repeat, takewhile
+    return sum(1 for _ in accumulate(repeat(n), lambda x, _: print(x) or (next(iter(())) if x == 1 else x // 2 if x % 2 == 0 else x * 3 + 1)))
+    """The explaination:
+
+    gen_next_value = lambda x: x // 2 if x % 2 == 0 else x * 3 + 1
+    throw_stop_iter = next(iter(()))
+    construct_generator_with_print = lambda x, _: print(x) or (throw_stop_iter if x == 1 else gen_next_value(x))
+    all_numbers = accumulate(repeat(n), construct_generator_with_print)
+    length = sum(1 for _ in all_numbers)
+    return length
+    """
