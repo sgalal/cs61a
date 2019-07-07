@@ -14,7 +14,9 @@ def falling(n, k):
     >>> falling(4, 1)  # 4
     4
     """
-    "*** YOUR CODE HERE ***"
+    from functools import reduce
+    from operator import mul
+    return reduce(mul, range(n, n - k, -1), 1)
 
 def double_eights(n):
     """Return true if n has two eights in a row.
@@ -31,4 +33,4 @@ def double_eights(n):
     >>> double_eights(80808080)
     False
     """
-    "*** YOUR CODE HERE ***"
+    return '88' in str(n)

@@ -13,7 +13,8 @@ def skip_add(n):
     ...       ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    helper = lambda n, acc: acc if n < 0 else helper(n - 2, acc + n)
+    return helper(n, 0)
 
 
 this_file = __file__
@@ -38,7 +39,9 @@ def hailstone(n):
     ...       ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    gen_next_value = lambda x: x // 2 if x % 2 == 0 else x * 3 + 1
+    helper = lambda n, acc: print(n) or (acc + 1 if n == 1 else helper(gen_next_value(n), acc + 1))
+    return helper(n, 0)
 
 def summation(n, term):
 
@@ -58,4 +61,5 @@ def summation(n, term):
     True
     """
     assert n >= 1
-    "*** YOUR CODE HERE ***"
+    helper = lambda n, acc: acc if n == 0 else helper(n - 1, acc + term(n))
+    return helper(n, 0)

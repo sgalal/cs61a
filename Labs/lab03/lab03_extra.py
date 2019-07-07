@@ -10,7 +10,10 @@ def is_prime(n):
     >>> is_prime(521)
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n == 1:
+        return False  # 1 is not considered to be a prime number
+    helper = lambda i: True if i == n else False if n % i == 0 else helper(i + 1)
+    return helper(2)
 
 def gcd(a, b):
     """Returns the greatest common divisor of a and b.
@@ -25,7 +28,8 @@ def gcd(a, b):
     >>> gcd(40, 40)
     40
     """
-    "*** YOUR CODE HERE ***"
+    min_val, max_val = min(a, b), max(a, b)
+    return min_val if max_val % min_val == 0 else gcd(min_val, max_val % min_val)
 
 def ten_pairs(n):
     """Return the number of ten-pairs within positive integer n.
@@ -37,4 +41,8 @@ def ten_pairs(n):
     >>> ten_pairs(9641469)
     6
     """
-    "*** YOUR CODE HERE ***"
+    def count_targets(n, tar, acc):
+        return acc if n == 0 else count_targets(n // 10, tar, acc + 1 if n % 10 == tar else acc)
+    def iterate_digits(n, acc):
+        return acc if n == 0 else iterate_digits(n // 10, acc + count_targets(n // 10, 10 - n % 10, 0))
+    return iterate_digits(n, 0)

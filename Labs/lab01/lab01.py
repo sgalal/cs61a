@@ -8,7 +8,7 @@ def both_positive(x, y):
     >>> both_positive(1, 1)
     True
     """
-    return x and y > 0 # You can replace this line!
+    return x > 0 and y > 0
 
 def sum_digits(n):
     """Sum all the digits of n.
@@ -23,4 +23,4 @@ def sum_digits(n):
     >>> x
     6
     """
-    "*** YOUR CODE HERE ***"
+    return sum(int(x) for x in str(n))
