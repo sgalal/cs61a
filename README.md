@@ -17,3 +17,5 @@ Mastery of a particular programming language is a very useful side effect of CS 
 ## TODO: ADD TITLE
 
 I write a lot of Python one-liners.
+
+Files that contained in the archives but need not to be modified are ignored. All the files are keep intact as they are in the final submit. All the modifications go in patch files.
