@@ -36,7 +36,8 @@ def product(n, term):
     >>> check(HW_SOURCE_FILE, 'product', ['Recursion'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    from functools import reduce
+    return reduce(mul, map(term, range(1, n + 1)), 1)
 
 def factorial(n):
     """Return n factorial for n >= 0 by calling product.
@@ -49,7 +50,7 @@ def factorial(n):
     >>> check(HW_SOURCE_FILE, 'factorial', ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    return product(n, identity)
 
 def accumulate(combiner, base, n, term):
     """Return the result of combining the first n terms in a sequence and base.
@@ -69,7 +70,8 @@ def accumulate(combiner, base, n, term):
     >>> accumulate(lambda x, y: x + y + 1, 2, 3, square)
     19
     """
-    "*** YOUR CODE HERE ***"
+    from functools import reduce
+    return reduce(combiner, map(term, range(1, n + 1)), base)
 
 def summation_using_accumulate(n, term):
     """Returns the sum of term(1) + ... + term(n). The implementation
@@ -84,7 +86,7 @@ def summation_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    return accumulate(add, 0, n, term)
 
 def product_using_accumulate(n, term):
     """An implementation of product using accumulate.
@@ -98,13 +100,11 @@ def product_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    return accumulate(mul, 1, n, term)
 
 def compose1(f, g):
     """Return a function h, such that h(x) = f(g(x))."""
-    def h(x):
-        return f(g(x))
-    return h
+    return lambda x: f(g(x))
 
 def make_repeater(f, n):
     """Return the function that computes the nth application of f.
@@ -121,7 +121,7 @@ def make_repeater(f, n):
     >>> make_repeater(square, 0)(5) # Yes, it makes sense to apply the function zero times! 
     5
     """
-    "*** YOUR CODE HERE ***"
+    return accumulate(compose1, identity, n, lambda _: f)
 
 def num_sevens(n):
     """Returns the number of times 7 appears as a digit of n.
@@ -143,7 +143,7 @@ def num_sevens(n):
     ...       ['Assign', 'AugAssign'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    return str(n).count('7')
 
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
@@ -176,7 +176,15 @@ def pingpong(n):
     >>> check(HW_SOURCE_FILE, 'pingpong', ['Assign', 'AugAssign'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    return (lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda i: lambda is_up: lambda acc: (lambda is_up: acc if i == n else f(i + 1)(is_up)(acc + 1 if is_up else acc - 1))(not is_up if (lambda x: x % 7 == 0 or '7' in str(x))(i) else is_up))(1)(True)(1)
+    """Explanation:
+    I write a lot of Y combinator.
+
+    Y = lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n)))
+    should_reverse = lambda x: x % 7 == 0 or '7' in str(x)
+    helper = lambda f: lambda i: lambda is_up: lambda acc: (lambda is_up: acc if i == n else f(i + 1)(is_up)(acc + 1 if is_up else acc - 1))(not is_up if should_reverse(i) else is_up)
+    return Y(helper)(1)(True)(1)
+    """
 
 def count_change(amount):
     """Return the number of ways to make change for amount.
@@ -193,7 +201,14 @@ def count_change(amount):
     >>> check(HW_SOURCE_FILE, 'count_change', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    import math
+    return (lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda amount: lambda max_val: 1 if max_val == 1 else f(amount)(max_val // 2) if amount < max_val else f(amount - max_val)(max_val) + f(amount)(max_val // 2))(amount)(2 ** math.floor(math.log2(amount)))
+    """Explanation:
+
+    Y = lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n)))
+    helper = lambda f: lambda amount: lambda max_val: 1 if max_val == 1 else f(amount)(max_val // 2) if amount < max_val else f(amount - max_val)(max_val) + f(amount)(max_val // 2)
+    return Y(helper)(amount)(2 ** math.floor(math.log2(amount)))
+    """
 
 
 
@@ -234,6 +249,17 @@ def move_stack(n, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    return (lambda other: None if n == 0 else move_stack(n - 1, start, other) or print_move(start, end) or move_stack(n - 1, other, end))(6 - start - end)
+    """Explanation:
+
+    other = 6 - start - end
+    if n == 0:
+        return
+    else:
+        move_stack(n - 1, start, other)
+        print_move(start, end)
+        move_stack(n - 1, other, end)
+    """
 
 from operator import sub, mul
 
@@ -246,4 +272,10 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return lambda n: (lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda i: lambda acc: acc if i == 0 else f(i - 1)(acc * i))(n)(1)
+    """Explanation:
+
+    Y = lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n)))
+    helper = lambda f: lambda i: lambda acc: acc if i == 0 else f(i - 1)(acc * i)
+    return lambda n: Y(helper)(n)(1)
+    """
