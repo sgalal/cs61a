@@ -1,3 +1,4 @@
+-- Generate the final strategy for Hog
 -- stack ghc -- Hog.hs -threaded -O2 -o Hog
 -- ./Hog +RTS -N
 
@@ -11,8 +12,8 @@ import Data.Monoid (Sum(..), getSum)
 import Data.Ratio ((%))
 import Data.Tuple (swap)
 
-dice_result_1 :: [(Rational, Word)]
-dice_result_1 =
+diceResult1 :: [(Rational, Word)]
+diceResult1 =
   [ (1 % 6, 1)
   , (1 % 6, 2)
   , (1 % 6, 3)
@@ -21,8 +22,8 @@ dice_result_1 =
   , (1 % 6, 6)
   ]
 
-dice_result_2 :: [(Rational, Word)]
-dice_result_2 =
+diceResult2 :: [(Rational, Word)]
+diceResult2 =
   [ (11 % 36, 1)
   , (1 % 36, 4)
   , (1 % 18, 5)
@@ -35,8 +36,8 @@ dice_result_2 =
   , (1 % 36, 12)
   ]
 
-dice_result_3 :: [(Rational, Word)]
-dice_result_3 =
+diceResult3 :: [(Rational, Word)]
+diceResult3 =
   [ (91 % 216, 1)
   , (1 % 216, 6)
   , (1 % 72, 7)
@@ -53,8 +54,8 @@ dice_result_3 =
   , (1 % 216, 18)
   ]
 
-dice_result_4 :: [(Rational, Word)]
-dice_result_4 =
+diceResult4 :: [(Rational, Word)]
+diceResult4 =
   [ (671 % 1296, 1)
   , (1 % 1296, 8)
   , (1 % 324, 9)
@@ -75,8 +76,8 @@ dice_result_4 =
   , (1 % 1296, 24)
   ]
 
-dice_result_5 :: [(Rational, Word)]
-dice_result_5 =
+diceResult5 :: [(Rational, Word)]
+diceResult5 =
   [ (4651 % 7776, 1)
   , (1 % 7776, 10)
   , (5 % 7776, 11)
@@ -101,8 +102,8 @@ dice_result_5 =
   , (1 % 7776, 30)
   ]
 
-dice_result_6 :: [(Rational, Word)]
-dice_result_6 =
+diceResult6 :: [(Rational, Word)]
+diceResult6 =
   [ (31031 % 46656, 1)
   , (1 % 46656, 12)
   , (1 % 7776, 13)
@@ -131,8 +132,8 @@ dice_result_6 =
   , (1 % 46656, 36)
   ]
 
-dice_result_7 :: [(Rational, Word)]
-dice_result_7 =
+diceResult7 :: [(Rational, Word)]
+diceResult7 =
   [ (201811 % 279936, 1)
   , (1 % 279936, 14)
   , (7 % 279936, 15)
@@ -165,8 +166,8 @@ dice_result_7 =
   , (1 % 279936, 42)
   ]
 
-dice_result_8 :: [(Rational, Word)]
-dice_result_8 =
+diceResult8 :: [(Rational, Word)]
+diceResult8 =
   [ (1288991 % 1679616, 1)
   , (1 % 1679616, 16)
   , (1 % 209952, 17)
@@ -203,8 +204,8 @@ dice_result_8 =
   , (1 % 1679616, 48)
   ]
 
-dice_result_9 :: [(Rational, Word)]
-dice_result_9 =
+diceResult9 :: [(Rational, Word)]
+diceResult9 =
   [ (8124571 % 10077696, 1)
   , (1 % 10077696, 18)
   , (1 % 1119744, 19)
@@ -245,8 +246,8 @@ dice_result_9 =
   , (1 % 10077696, 54)
   ]
 
-dice_result_10 :: [(Rational, Word)]
-dice_result_10 =
+diceResult10 :: [(Rational, Word)]
+diceResult10 =
   [ (50700551 % 60466176, 1)
   , (1 % 60466176, 20)
   , (5 % 30233088, 21)
@@ -292,99 +293,97 @@ dice_result_10 =
   ]
 
 -- Get the minimal digit of a natural number.
-min_digit :: Word -> Word
-min_digit n =
-  if n == 0
-    then 0
-    else min_digit_inner (n `quot` 10) (n `rem` 10)
+minDigit :: Word -> Word
+minDigit 0 = 0
+minDigit n = uncurry aux (n `quotRem` 10)
   where
-  min_digit_inner :: Word -> Word -> Word
-  min_digit_inner m min_till_now =
+  aux :: Word -> Word -> Word
+  aux m everMin =
     if m == 0
-      then min_till_now
-      else min_digit_inner all_but_last (min last_digit min_till_now)
+      then everMin
+      else aux allButLast (min lastDigit everMin)
     where
-    (all_but_last, last_digit) = m `quotRem` 10
+    (allButLast, lastDigit) = m `quotRem` 10
 
 -- Get the leftmost digit of a natural number.
-leftmost_digit :: Word -> Word
-leftmost_digit = until (< 10) (`quot` 10)
+leftmostDigit :: Word -> Word
+leftmostDigit = until (< 10) (`quot` 10)
 
 -- Apply swap if necessary according to the rule of Swine Swap,
 -- and return as it is if unnecessary.
-apply_swap :: (Word, Word) -> (Word, Word)
-apply_swap a@(score, oppon) = if should_swap then swap a else a
+applySwap :: (Word, Word) -> (Word, Word)
+applySwap a@(score, oppon) = if shouldSwap then swap a else a
   where
-  score_leftmost = leftmost_digit score
-  oppon_rightmost = oppon `rem` 10
-  should_swap = score_leftmost == oppon_rightmost
+  scoreLeftmost = leftmostDigit score
+  opponRightmost = oppon `rem` 10
+  shouldSwap = scoreLeftmost == opponRightmost
 
 -- Sum up all possibilities.
-fold_probs :: [(Rational, Rational)] -> Rational
-fold_probs = getSum . fold . fmap (Sum . uncurry (*))
+foldProbs :: [(Rational, Rational)] -> Rational
+foldProbs = getSum . fold . fmap (Sum . uncurry (*))
 
 -- Find the maximum value and its index in a list.
-maximum_index_and_value :: Ord a => [a] -> (Word, a)
-maximum_index_and_value [] = undefined
-maximum_index_and_value (x : xs) = maximum_index_and_value_inner xs x 1 0
+maxIndexAndValue :: Ord a => [a] -> (Word, a)
+maxIndexAndValue [] = undefined
+maxIndexAndValue (x : xs) = aux xs x 1 0
+  where
+  aux :: Ord a => [a] -> a -> Word -> Word -> (Word, a)
+  aux [] everMax _ everMaxIndex = (everMaxIndex, everMax)
+  aux (y : ys) everMax currIndex everMaxIndex =
+    if y > everMax
+      then aux ys y (currIndex + 1) currIndex
+      else aux ys everMax (currIndex + 1) everMaxIndex
 
-maximum_index_and_value_inner :: Ord a => [a] -> a -> Word -> Word -> (Word, a)
-maximum_index_and_value_inner [] ever_max _ ever_max_index = (ever_max_index, ever_max)
-maximum_index_and_value_inner (x : xs) ever_max this_index ever_max_index =
-  if x > ever_max
-    then maximum_index_and_value_inner xs x (this_index + 1) this_index
-    else maximum_index_and_value_inner xs ever_max (this_index + 1) ever_max_index
+winProb :: Word -> Word -> (Word, Rational)
+winProb score oppon
+  | score >= 100 = (0, 1.0)
+  | oppon >= 100 = (0, 0.0)
+  | otherwise = maxIndexAndValue $
+      [ diceProb0
+      , diceProb1
+      , diceProb2
+      , diceProb3
+      , diceProb4
+      , diceProb5
+      , diceProb6
+      , diceProb7
+      , diceProb8
+      , diceProb9
+      , diceProb10
+      ]
+    where
+    calcProb :: Word -> Rational
+    calcProb gain = (1 -) $ snd $ winProbMemo $ swap $ applySwap (score + gain, oppon)
 
-win_prob :: (Word, Word) -> (Word, Rational)
-win_prob (s, o) = (f <$> zip [0..] (repeat [0..])) !! (fromEnum s) !! (fromEnum o)
+    diceProb0 :: Rational
+    diceProb0 = calcProb (10 - minDigit oppon)
+
+    diceProbN :: [(Rational, Word)] -> Rational
+    diceProbN = foldProbs . (parMap rseq) (fmap calcProb)
+
+    diceProb1 = diceProbN diceResult1
+    diceProb2 = diceProbN diceResult2
+    diceProb3 = diceProbN diceResult3
+    diceProb4 = diceProbN diceResult4
+    diceProb5 = diceProbN diceResult5
+    diceProb6 = diceProbN diceResult6
+    diceProb7 = diceProbN diceResult7
+    diceProb8 = diceProbN diceResult8
+    diceProb9 = diceProbN diceResult9
+    diceProb10 = diceProbN diceResult10
+
+winProbMemo :: (Word, Word) -> (Word, Rational)
+winProbMemo (s, o) = (f <$> zip [0..] (repeat [0..])) !! (fromEnum s) !! (fromEnum o)
   where
   f :: (Word, [Word]) -> [(Word, Rational)]
-  f (i, xs) = fmap (plain_win_prob i) xs
+  f (i, xs) = fmap (winProb i) xs
 
-  plain_win_prob :: Word -> Word -> (Word, Rational)
-  plain_win_prob score oppon
-    | score >= 100 = (0, 1.0)
-    | oppon >= 100 = (0, 0.0)
-    | otherwise = maximum_index_and_value $
-        [ throw_0_prob
-        , throw_1_prob
-        , throw_2_prob
-        , throw_3_prob
-        , throw_4_prob
-        , throw_5_prob
-        , throw_6_prob
-        , throw_7_prob
-        , throw_8_prob
-        , throw_9_prob
-        , throw_10_prob
-        ]
-      where
-      calc_prob :: Word -> Rational
-      calc_prob gain = (1 -) $ snd $ win_prob $ swap $ apply_swap (score + gain, oppon)
-
-      throw_0_prob :: Rational
-      throw_0_prob = calc_prob (10 - min_digit oppon)
-
-      throw_n_prob :: [(Rational, Word)] -> Rational
-      throw_n_prob = fold_probs . (parMap rseq) (fmap calc_prob)
-
-      throw_1_prob = throw_n_prob dice_result_1
-      throw_2_prob = throw_n_prob dice_result_2
-      throw_3_prob = throw_n_prob dice_result_3
-      throw_4_prob = throw_n_prob dice_result_4
-      throw_5_prob = throw_n_prob dice_result_5
-      throw_6_prob = throw_n_prob dice_result_6
-      throw_7_prob = throw_n_prob dice_result_7
-      throw_8_prob = throw_n_prob dice_result_8
-      throw_9_prob = throw_n_prob dice_result_9
-      throw_10_prob = throw_n_prob dice_result_10
-
-get_win_prob :: Word -> Word -> Word
-get_win_prob score oppon = fst $ win_prob (score, oppon)
+getWinProb :: Word -> Word -> Word
+getWinProb score oppon = fst $ winProbMemo (score, oppon)
 
 main :: IO ()
 main = print $ do
   x <- [0..99]
   pure $ do
     y <- [0..99]
-    pure $ get_win_prob x y
+    pure $ getWinProb x y
