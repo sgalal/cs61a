@@ -13,7 +13,7 @@ def squares(s):
     >>> squares(seq)
     []
     """
-    "*** YOUR CODE HERE ***"
+    return [int(n) for n in map(sqrt, s) if n.is_integer()]
 
 def key_of_min_value(d):
     """Returns the key in a dict d that corresponds to the minimum value of d.
@@ -23,4 +23,4 @@ def key_of_min_value(d):
     >>> key_of_min_value(letters)
     'c'
     """
-    "*** YOUR CODE HERE ***"
+    return min(d.items(), key=lambda x: x[1])[0]

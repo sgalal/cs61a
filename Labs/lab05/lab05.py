@@ -13,12 +13,26 @@ def merge(lst1, lst2):
     >>> merge([5, 7], [2, 4, 6])
     [2, 4, 5, 6, 7]
     """
-    if not lst1 or not lst2:
-        return []
-    elif lst1[0] < lst2[0]:
-        return [lst1[0]] + merge(lst1[1:], lst2)
-    else:
-        return [lst2[0]] + merge(lst1, lst2[1:])
+    return lst2 if not lst1 else lst1 if not lst2 else [lst1[0]] + merge(lst1[1:], lst2) if lst1[0] <= lst2[0] else [lst2[0]] + merge(lst1, lst2[1:])
+    """Explanation:
+
+    cons = lambda x, xs: [x] + xs
+    uncons = lambda xs: (xs[0], xs[1:])
+    
+    def helper(xs, ys):
+        if not xs:
+            return ys
+        elif not ys:
+            return xs
+        else:
+            car_x, cdr_x = uncons(xs)
+            car_y, cdr_y = uncons(ys)
+            if car_x <= car_y:
+                return cons(car_x, helper(cdr_x, ys))
+            else:
+                return cons(car_y, helper(xs, cdr_y))
+    return helper(lst1, lst2)
+    """
 
 def add_chars(w1, w2):
     """
@@ -45,7 +59,24 @@ def add_chars(w1, w2):
     ...       ['For', 'While', 'Set', 'SetComp']) # Must use recursion
     True
     """
-    "*** YOUR CODE HERE ***"
+    return (lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda xs: lambda ys: ys if not xs else f(xs[1:])(ys[1:]) if xs[0] == ys[0] else ys[0] + f(xs)(ys[1:]))(w1)(w2)
+    """Explanation:
+
+    cons = lambda x, xs: x + xs
+    uncons = lambda xs: (xs[0], xs[1:])
+
+    def helper(xs, ys):
+        if not xs:
+            return ys
+        else:
+            car_x, cdr_x = uncons(xs)
+            car_y, cdr_y = uncons(ys)
+            if car_x == car_y:
+                return helper(cdr_x, cdr_y)
+            else:
+                return cons(car_y, helper(xs, cdr_y))
+    return helper(w1, w2)
+    """
 
 def acorn_finder(t):
     """Returns True if t contains a node with the value 'acorn' and
@@ -64,7 +95,7 @@ def acorn_finder(t):
     >>> acorn_finder(t)
     True
     """
-    "*** YOUR CODE HERE ***"
+    return label(t) == 'acorn' or any(acorn_finder(b) for b in branches(t))
 
 # Tree ADT
 def tree(label, branches=[]):
