@@ -2,3 +2,5 @@
 ok
 tests
 construct_check.py
+.*
+__pycache__
