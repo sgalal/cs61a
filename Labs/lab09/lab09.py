@@ -124,7 +124,9 @@ def link_to_list(link):
     >>> link_to_list(Link.empty)
     []
     """
-    "*** YOUR CODE HERE ***"
+    from functools import reduce
+    from itertools import accumulate, chain, repeat, takewhile
+    return list(() if link is Link.empty else map(lambda x_y: x_y[1], takewhile(lambda x: x is not None, accumulate(chain(((link.rest, link.first),), repeat(None)), lambda x_y, _: None if x_y[0] is Link.empty else (x_y[0].rest, x_y[0].first)))))
 
 def store_digits(n):
     """Stores the digits of a positive number n in a linked list.
@@ -137,7 +139,9 @@ def store_digits(n):
     >>> store_digits(876)
     Link(8, Link(7, Link(6)))
     """
-    "*** YOUR CODE HERE ***"
+    from functools import reduce
+    from itertools import accumulate, chain, repeat, takewhile
+    return reduce(lambda acc, x: Link(x, acc), map(lambda x_y: x_y[1], takewhile(lambda x: x != (0, 0), accumulate(chain((divmod(n, 10),), repeat(None)), lambda x_y, _: divmod(x_y[0], 10)))), Link.empty)
 
 def cumulative_sum(t):
     """Mutates t so that each node's label becomes the sum of all labels in
@@ -148,4 +152,4 @@ def cumulative_sum(t):
     >>> t
     Tree(16, [Tree(8, [Tree(5)]), Tree(7)])
     """
-    "*** YOUR CODE HERE ***"
+    t.label += sum(cumulative_sum(b) or b.label for b in t.branches)

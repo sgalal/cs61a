@@ -129,7 +129,7 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    "*** YOUR CODE HERE ***"
+    return (lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda link: lambda seen: False if link is Link.empty else True if any(id(link) == s for s in seen) else f(link.rest)(seen | {id(link)}))(link)(set())
 
 def has_cycle_constant(link):
     """Return whether link contains a cycle.
@@ -142,7 +142,7 @@ def has_cycle_constant(link):
     >>> has_cycle_constant(t)
     False
     """
-    "*** YOUR CODE HERE ***"
+    return False if link is Link.empty or link.rest is Link.empty else (lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda slow: lambda fast: False if fast is Link.empty or fast.rest is Link.empty else True if slow is fast else f(slow.rest)(fast.rest.rest))(link.rest)(link.rest.rest)
 
 def reverse_other(t):
     """Mutates the tree such that nodes on every other (odd-depth) level
@@ -157,4 +157,4 @@ def reverse_other(t):
     >>> t
     Tree(1, [Tree(8, [Tree(3, [Tree(5), Tree(4)]), Tree(6, [Tree(7)])]), Tree(2)])
     """
-    "*** YOUR CODE HERE ***"
+    t.branches = tuple(reverse_other(x) for b in t.branches for x in b.branches) and False or [Tree(rb.label, b.branches) for rb, b in zip(reversed(t.branches), t.branches)]
