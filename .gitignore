@@ -1,6 +1,14 @@
+# Ok
 *.ok
 ok
 tests
 construct_check.py
+
+# Python
 .*
 __pycache__
+
+# Haskell
+*.o
+*.hi
+*.exe

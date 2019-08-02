@@ -1,6 +1,6 @@
 -- Generate the final strategy for Hog
--- stack ghc -- Hog.hs -threaded -O2 -o Hog
--- ./Hog +RTS -N
+-- stack ghc -- Hog.hs -threaded -O2 -o Hog.exe
+-- ./Hog.exe +RTS -N
 
 {-# OPTIONS_GHC -Wall -Werror #-}
 
