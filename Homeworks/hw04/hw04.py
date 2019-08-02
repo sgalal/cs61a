@@ -17,7 +17,8 @@ def make_fib():
     >>> fib() + sum([fib2() for _ in range(5)])
     12
     """
-    "*** YOUR CODE HERE ***"
+    from itertools import accumulate, chain, repeat
+    return map(lambda x_y: x_y[0], accumulate(chain(((0, 1),), repeat(None)), lambda x_y, _: (x_y[1], x_y[0] + x_y[1]))).__next__
 
 def make_withdraw(balance, password):
     """Return a password-protected withdraw function.
@@ -47,7 +48,29 @@ def make_withdraw(balance, password):
     >>> type(w(10, 'l33t')) == str
     True
     """
-    "*** YOUR CODE HERE ***"
+    return (lambda f: lambda x, y: f(x)(y))((lambda f: (lambda x: x(x))(lambda x: f(lambda n: x(x)(n))))(lambda f: lambda amount: lambda attempt_password: (None if hasattr(f, 'new_balance') else setattr(f, 'new_balance', balance)) or (None if hasattr(f, 'fail_count') else setattr(f, 'fail_count', 0)) or (None if hasattr(f, 'attempts') else setattr(f, 'attempts', [])) or (('Your account is locked. Attempts: ' + str(f.attempts)) if f.fail_count == 3 else setattr(f, 'attempts', f.attempts + [attempt_password]) or setattr(f, 'fail_count', f.fail_count + 1) or 'Incorrect password' if attempt_password != password else 'Insufficient funds' if amount > f.new_balance else setattr(f, 'new_balance', f.new_balance - amount) or f.new_balance)))
+    """Explanation:
+
+    def withdraw(f):
+        def inner(amount, attempt_password):
+            None if hasattr(f, 'new_balance') else setattr(f, 'new_balance', balance)
+            None if hasattr(f, 'fail_count') else setattr(f, 'fail_count', 0)
+            None if hasattr(f, 'attempts') else setattr(f, 'attempts', [])
+
+            if f.fail_count == 3:
+                return 'Your account is locked. Attempts: ' + str(f.attempts)
+            elif attempt_password != password:
+                setattr(f, 'attempts', f.attempts + [attempt_password])
+                setattr(f, 'fail_count', f.fail_count + 1)
+                return 'Incorrect password'
+            elif amount > f.new_balance:
+                return 'Insufficient funds'
+            else:
+                setattr(f, 'new_balance', f.new_balance - amount)
+                return f.new_balance
+        return inner
+    return withdraw(withdraw)
+    """
 
 class Mint:
     """A mint creates coins by stamping on years.
@@ -77,7 +100,6 @@ class Mint:
     >>> Dime.cents = 20  # Upgrade all dimes!
     >>> dime.worth()     # 20 cents + (106 - 50 years)
     126
-
     """
     current_year = 2019
 
@@ -85,17 +107,17 @@ class Mint:
         self.update()
 
     def create(self, kind):
-        "*** YOUR CODE HERE ***"
+        return kind(self.year)
 
     def update(self):
-        "*** YOUR CODE HERE ***"
+        self.year = self.current_year
 
 class Coin:
     def __init__(self, year):
         self.year = year
 
     def worth(self):
-        "*** YOUR CODE HERE ***"
+        return self.cents + (0 if Mint.current_year - self.year <= 50 else Mint.current_year - self.year - 50)
 
 class Nickel(Coin):
     cents = 5
@@ -140,9 +162,38 @@ class VendingMachine:
     >>> w.vend()
     'Here is your soda.'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, product, price):
+        self.product = product
+        self.price = price
+        self.balance = 0
+        self.stock = 0
 
-def remove_all(link , value):
+    def vend(self):
+        if self.stock == 0:
+            return 'Machine is out of stock.'
+        elif self.price > self.balance:
+            return f'You must deposit ${self.price - self.balance} more.'
+        elif self.price == self.balance:
+            self.stock -= 1
+            return f'Here is your {self.product}.'
+        else:  # self.price < self.balance
+            self.stock -= 1
+            change = self.balance - self.price
+            self.balance = 0
+            return f'Here is your {self.product} and ${change} change.'
+
+    def restock(self, count):
+        self.stock += count
+        return f'Current {self.product} stock: {self.stock}'
+
+    def deposit(self, amount):
+        if self.stock == 0:
+            return f'Machine is out of stock. Here is your ${amount}.'
+        else:
+            self.balance += amount
+            return f'Current balance: ${self.balance}'
+
+def remove_all(link, value):
     """Remove all the nodes containing value in link. Assume that the
     first element is never removed.
 
@@ -159,7 +210,10 @@ def remove_all(link , value):
     >>> print(l1)
     <0 1>
     """
-    "*** YOUR CODE HERE ***"
+    from functools import partial, reduce
+    from itertools import accumulate, chain, repeat, takewhile
+    from operator import ne
+    link.rest = reduce(lambda acc, x: Link(x, acc), reversed(tuple(filter(partial(ne, value), (() if link.rest is Link.empty else map(lambda x_y: x_y[1], takewhile(lambda x: x is not None, accumulate(chain(((link.rest.rest, link.rest.first),), repeat(None)), lambda x_y, _: None if x_y[0] is Link.empty else (x_y[0].rest, x_y[0].first)))))))), Link.empty)
 
 def generate_paths(t, x):
     """Yields all possible paths from the root of t to a node with the label x
@@ -195,13 +249,27 @@ def generate_paths(t, x):
     >>> sorted(list(path_to_2))
     [[0, 2], [0, 2, 1, 2]]
     """
+    from itertools import chain
+    return chain(() if t.label != x else ([x],), ([t.label] + r for b in t.branches for r in generate_paths(b, x)))
+    '''Explanation:
 
     "*** YOUR CODE HERE ***"
+    if t.label == x:
+        yield [x]
 
-    for _______________ in _________________:
-        for _______________ in _________________:
+    for b in t.branches:
+        for r in generate_paths(b, x):
 
             "*** YOUR CODE HERE ***"
+            yield [t.label] + r
+
+    Explanation 2:
+
+    data Tree a = Tree a [Tree a] deriving (Show, Eq, Ord, Functor)
+
+    paths :: Eq a => Tree a -> a -> [[a]]
+    paths (Tree a ts) v = (if a == v then ([v] :) else id) [ a : r | t <- ts, r <- paths t v ]
+    '''
 
 ## Link Class ##
 

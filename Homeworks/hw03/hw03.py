@@ -92,7 +92,7 @@ def taxicab(a, b):
     >>> taxicab(ess_a_bagel, times_square)
     9
     """
-    "*** YOUR CODE HERE ***"
+    return abs(street(a) - street(b)) + abs(avenue(a) - avenue(b))
 
 def flatten(lst):
     """Returns a flattened version of lst.
@@ -110,7 +110,7 @@ def flatten(lst):
     >>> x
     [[1, [1, 1]], 1, [1, 1]]
     """
-    "*** YOUR CODE HERE ***"
+    return [x for i in lst for x in ([i] if type(i) != list else flatten(i))]
 
 def replace_leaf(t, old, new):
     """Returns a new tree where every leaf value equal to old has
@@ -141,7 +141,7 @@ def replace_leaf(t, old, new):
     >>> laerad == yggdrasil # Make sure original tree is unmodified
     True
     """
-    "*** YOUR CODE HERE ***"
+    return tree(new if label(t) == old else label(t)) if is_leaf(t) else tree(label(t), [replace_leaf(b, old, new) for b in branches(t)])
 
 # Mobiles
 
@@ -187,12 +187,12 @@ def end(s):
 def weight(size):
     """Construct a weight of some size."""
     assert size > 0
-    "*** YOUR CODE HERE ***"
+    return ['weight', size]
 
 def size(w):
     """Select the size of a weight."""
     assert is_weight(w), 'must call size on a weight'
-    "*** YOUR CODE HERE ***"
+    return w[1]
 
 def is_weight(w):
     """Whether w is a weight."""
@@ -240,7 +240,7 @@ def balanced(m):
     >>> balanced(mobile(side(1, w), side(1, v)))
     False
     """
-    "*** YOUR CODE HERE ***"
+    return (lambda l, r: (lambda le, re: length(l) * total_weight(le) == length(r) * total_weight(re) and (is_weight(le) or balanced(le)) and (is_weight(re) or balanced(re)))(end(l), end(r)))(left(m), right(m))
 
 def totals_tree(m):
     """Return a tree representing the mobile with its total weight at the root.
@@ -267,7 +267,7 @@ def totals_tree(m):
           3
           2
     """
-    "*** YOUR CODE HERE ***"
+    return tree(total_weight(m), [totals_tree(end(left(m))), totals_tree(end(right(m)))]) if is_mobile(m) else tree(total_weight(m))
 
 ###################
 # Extra Questions #
@@ -281,11 +281,11 @@ def successor(n):
 
 def one(f):
     """Church numeral 1: same as successor(zero)"""
-    "*** YOUR CODE HERE ***"
+    return lambda x: f(x)
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
-    "*** YOUR CODE HERE ***"
+    return lambda x: f(f(x))
 
 three = successor(two)
 
@@ -301,7 +301,7 @@ def church_to_int(n):
     >>> church_to_int(three)
     3
     """
-    "*** YOUR CODE HERE ***"
+    return n(lambda x: x + 1)(0)  # λa.a (λb.b+1) (0)
 
 def add_church(m, n):
     """Return the Church numeral for m + n, for Church numerals m and n.
@@ -309,7 +309,7 @@ def add_church(m, n):
     >>> church_to_int(add_church(two, three))
     5
     """
-    "*** YOUR CODE HERE ***"
+    return lambda f: lambda x: m(f)(n(f)(x))  # λm.λn.λf.λx.m f (n f x)
 
 def mul_church(m, n):
     """Return the Church numeral for m * n, for Church numerals m and n.
@@ -320,7 +320,7 @@ def mul_church(m, n):
     >>> church_to_int(mul_church(three, four))
     12
     """
-    "*** YOUR CODE HERE ***"
+    return lambda f: m(n(f))  # λm.λn.λf.m (n f)
 
 def pow_church(m, n):
     """Return the Church numeral m ** n, for Church numerals m and n.
@@ -330,4 +330,4 @@ def pow_church(m, n):
     >>> church_to_int(pow_church(three, two))
     9
     """
-    "*** YOUR CODE HERE ***"
+    return n(m)
