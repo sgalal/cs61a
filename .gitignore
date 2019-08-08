@@ -15,3 +15,7 @@ __pycache__
 
 # Scheme
 scheme
+
+# SQL
+sqlite3
+sqlite_shell.py
