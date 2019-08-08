@@ -12,3 +12,6 @@ __pycache__
 *.o
 *.hi
 *.exe
+
+# Scheme
+scheme
