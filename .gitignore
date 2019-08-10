@@ -16,6 +16,9 @@ __pycache__
 # Scheme
 scheme
 
+# Scheme editor
+editor
+
 # SQL
 sqlite3
 sqlite_shell.py
