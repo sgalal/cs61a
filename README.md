@@ -1,21 +1,11 @@
-# CS 61A: Structure and Interpretation of Computer Programs
+# CS 61A
 
-## Introduction
+sgal's solutions for CS 61A: Structure and Interpretation of Computer Programs, Summer 2019
 
-The CS 61 series is an introduction to computer science, with particular emphasis on software and on machines from a programmer's point of view.
+## Features
 
-1. **CS 61A** concentrates on the idea of abstraction, allowing the programmer to think in terms appropriate to the problem rather than in low-level operations dictated by the computer hardware.
-1. **CS 61B** deals with the more advanced engineering aspects of software, such as constructing and analyzing large programs.
-1. **CS 61C** focuses on machines and how they execute the programs you write.
+I write a lot of one-liners.
 
-In CS 61A, we are interested in teaching you about programming, not about how to use one particular programming language. We consider a series of techniques for controlling program complexity, such as functional programming, data abstraction, and object-oriented programming.
+## Known Issues
 
-CS 61A primarily uses the Python 3 programming language. Python is a popular language in both industry and academia. It is also particularly well-suited to the task of exploring the topics taught in this course. It is an open-source language developed by a large volunteer community that prides itself on the diversity of its contributors. We will also examine the Scheme programming language, as well as the Structured Query Language (SQL) in the latter half of the course.
-
-Mastery of a particular programming language is a very useful side effect of CS 61A. However, our goal is not to choose what language you use in your future studies and career. Instead, our hope is that once you have learned the essence of programming, you will find that picking up a new programming language is but a few days' work.
-
-## TODO: ADD TITLE
-
-I write a lot of Python one-liners.
-
-Files that contained in the archives but need not to be modified are ignored. All the files are keep intact as they are in the final submit. All the modifications go in patch files.
+* lab 11 and 12 optional questions are not implemented
