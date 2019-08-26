@@ -6,6 +6,12 @@ sgal's solutions for CS 61A: Structure and Interpretation of Computer Programs, 
 
 I write a lot of one-liners.
 
+One-liner policy:
+
+* Python labs and homeworks are written in one line
+* Projects are not, for the sake of readability, unless I really want to
+* Scheme and SQL are not written in one-line, because convert them to one line are trivial
+
 ## Known Issues
 
 * lab 11 and 12 optional questions are not implemented
