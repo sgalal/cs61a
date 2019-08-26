@@ -4,6 +4,8 @@ sgal's solutions for CS 61A: Structure and Interpretation of Computer Programs, 
 
 ## Features
 
+**Python one-liners**
+
 I write a lot of one-liners.
 
 One-liner policy:
@@ -12,6 +14,10 @@ One-liner policy:
 * Projects are not, for the sake of readability, unless I really want to
 * Scheme and SQL are not written in one-line, because convert them to one line are trivial
 
+**Detailed `.gitignore`**
+
 ## Known Issues
 
 * lab 11 and 12 optional questions are not implemented
+* Scheme extra questions are not implemented
+* Scheme Contest is not implemented
