@@ -96,6 +96,7 @@ class nil(object):
 
 nil = nil() # Assignment hides the nil class; there is only one instance
 
+
 # Scheme list parser
 
 # Quotation markers
@@ -120,15 +121,15 @@ def scheme_read(src):
     val = src.remove_front() # Get the first token
     if val == 'nil':
         # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
+        return nil
         # END PROBLEM 2
     elif val == '(':
         # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
+        return read_tail(src)
         # END PROBLEM 2
     elif val in quotes:
         # BEGIN PROBLEM 7
-        "*** YOUR CODE HERE ***"
+        return Pair(quotes[val], Pair(scheme_read(src), nil))
         # END PROBLEM 7
     elif val not in DELIMITERS:
         return val
@@ -148,11 +149,12 @@ def read_tail(src):
             raise SyntaxError('unexpected end of file')
         elif src.current() == ')':
             # BEGIN PROBLEM 2
-            "*** YOUR CODE HERE ***"
+            src.remove_front()
+            return nil
             # END PROBLEM 2
         else:
             # BEGIN PROBLEM 2
-            "*** YOUR CODE HERE ***"
+            return Pair(scheme_read(src), read_tail(src))
             # END PROBLEM 2
     except EOFError:
         raise SyntaxError('unexpected end of file')

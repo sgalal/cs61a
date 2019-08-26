@@ -10,7 +10,65 @@
 ;;; *** Add your own tests here! ***
 ;;; ********************************
 ; BEGIN PROBLEM 0
-'replace-this-line
+
+;; Problem 6
+
+nil
+; expect ()
+
+(define a (+ 2 3))  ; Binds the name a to the value of (+ 2 3)
+; expect a
+
+(define tau (* 2 3.1415926))
+; expect tau
+
+(eval (define tau 6.28))
+; expect 6.28
+
+(eval 'tau)
+; expect 6.28
+
+tau
+; expect 6.28
+
+(define x 15)
+; expect x
+
+(define y (* 2 x))
+; expect y
+
+y
+; expect 30
+
+(+ y (* y 2) 1)
+; expect 91
+
+(define x 20)
+; expect x
+
+x
+; expect 20
+
+;; Problem 7
+
+'hello
+; expect hello
+
+'(1 2)
+; expect (1 2)
+
+'(1 (2 three (4 5)))
+; expect (1 (2 three (4 5)))
+
+(car '(a b))
+; expect a
+
+(eval (cons 'car '('(1 2))))
+; expect 1
+
+`(1 ,(+ 1 1) 3)
+; expect (1 2 3)
+
 ; END PROBLEM 0
 
 ;;; These are examples from several sections of "The Structure
@@ -60,7 +118,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Move the following (exit) line down the file to run additional tests. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(exit)
 
 
 ;;; 1.1.2
@@ -81,6 +138,8 @@ size
 (define circumference (* 2 pi radius))
 circumference
 ; expect 62.8318
+
+(exit)
 
 ;;; 1.1.4
 

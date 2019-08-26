@@ -12,3 +12,11 @@ Suite 1
 		>>> x
 		5
 
+Suite 2
+
+	>>> from ants import *
+
+	Case Example
+		>>> x = 6 + 7
+		>>> x
+		13
