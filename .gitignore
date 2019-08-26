@@ -1,11 +1,11 @@
 # Ok
 *.ok
+.ok_*
 ok
 tests
 construct_check.py
 
 # Python
-.*
 __pycache__
 
 # Haskell
