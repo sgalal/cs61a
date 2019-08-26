@@ -1,0 +1,4 @@
+*
+!/.gitignore
+!/hog_contest.py
+!*.hs

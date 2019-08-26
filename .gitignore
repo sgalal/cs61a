@@ -15,9 +15,8 @@ __pycache__
 
 # Scheme
 scheme
-
-# Scheme editor
 editor
+!/Projects/scheme
 
 # SQL
 sqlite3

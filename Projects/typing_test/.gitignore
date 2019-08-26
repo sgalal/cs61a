@@ -1,0 +1,5 @@
+*
+!/.gitignore
+!/questions
+!/questions/design_doc.txt
+!/typing_test.py
