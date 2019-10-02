@@ -27,11 +27,13 @@ Not Implemented:
 
 ## Python One-liners
 
-I write a lot of Python one-liners. Nearly all the Python homeworks and labs are implemented in one line.
+I write a lot of Python one-liners.
+
+Nearly all the Python homeworks and labs are implemented in one line.
 
 ### Why
 
-Some problems are required to be solved in one line, like [here](https://inst.eecs.berkeley.edu/~cs61a/su19/lab/lab02/#q3), [here](https://inst.eecs.berkeley.edu/~cs61a/su19/hw/hw02/#q1), [**here**](https://inst.eecs.berkeley.edu/~cs61a/su19/hw/hw02/#q8) and [here](https://inst.eecs.berkeley.edu/~cs61a/su19/lab/lab04/#q8). But why not others?
+Some problems are required to be solved in one line, like [here](https://inst.eecs.berkeley.edu/~cs61a/su19/lab/lab02/#q3), [here](https://inst.eecs.berkeley.edu/~cs61a/su19/hw/hw02/#q1), [**here**](https://inst.eecs.berkeley.edu/~cs61a/su19/hw/hw02/#q8) (yes, the Y combinator) and [here](https://inst.eecs.berkeley.edu/~cs61a/su19/lab/lab04/#q8). But why not others?
 
 ### Why is it possible?
 
