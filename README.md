@@ -29,7 +29,7 @@ Not Implemented:
 
 I write a lot of Python one-liners.
 
-Nearly all the Python homeworks and labs are implemented in one line.
+Nearly all the Python homework and labs are implemented in one line.
 
 ### Why
 
