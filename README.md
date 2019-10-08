@@ -181,3 +181,9 @@ make_withdraw = lambda balance, password: (lambda f: lambda x, y: f(x)(y))((lamb
 ## Detailed `.gitignore`
 
 The original archive contains the code skeleton, the OK autograder and other utilities. The detailed `.gitignore` files help filter away the unmodified parts.
+
+## Why Isn't Scheme Art Implemented?
+
+I tried to do so.
+
+![Scheme Error](error.png)
